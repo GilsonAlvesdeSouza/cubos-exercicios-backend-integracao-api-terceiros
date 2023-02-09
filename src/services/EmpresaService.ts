@@ -1,6 +1,7 @@
 import { instanceAxios } from '../InstanceAxios';
 import fs from 'fs/promises';
 import path from 'path';
+import { getErrorMessage } from '../helpers/getErrors';
 
 export class EmpresaService {
 	async getCompanyAPI(queryApi: string) {
@@ -19,8 +20,9 @@ export class EmpresaService {
 				const file = JSON.stringify(listEmpresas);
 				await fs.writeFile(path.resolve(__dirname, '../empresas.json'), file);
 			}
-
 			return res;
-		} catch (error) {}
+		} catch (error) {
+			throw new Error(getErrorMessage(error));
+		}
 	}
 }

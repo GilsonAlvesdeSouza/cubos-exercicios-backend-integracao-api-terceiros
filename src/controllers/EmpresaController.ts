@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import qs from 'qs';
+import 'dotenv/config';
 import { EmpresaService } from '../services/EmpresaService';
+import { getErrorMessage } from '../helpers/getErrors';
 
 const empresaService = new EmpresaService();
 
@@ -22,10 +24,14 @@ export class EmpresaController {
 		};
 
 		const queryApi = qs.stringify(dataAPI);
-		const empresa = await empresaService.getCompanyAPI(queryApi);
-		if (empresa) {
-			return res.json(empresa.data);
+		try {
+			const empresa = await empresaService.getCompanyAPI(queryApi);
+			if (empresa) {
+				return res.json(empresa.data);
+			}
+			res.status(404).json({ message: 'Empresa não encontrada.' });
+		} catch (error) {
+			res.status(400).json({ message: getErrorMessage(error) });
 		}
-		res.status(404).json({ message: 'Empresa não encontrada.' });
 	}
 }
