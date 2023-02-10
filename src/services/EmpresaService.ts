@@ -6,13 +6,13 @@ import { getErrorMessage } from '../helpers/getErrors';
 export class EmpresaService {
 	async getCompanyAPI(queryApi: string) {
 		let listEmpresas = [];
-		const buffer = await fs.readFile(
-			path.resolve(__dirname, '../empresas.json')
-		);
-		if (buffer.toString() !== '') {
-			listEmpresas = JSON.parse(buffer.toString());
-		}
 		try {
+			const buffer = await fs.readFile(
+				path.resolve(__dirname, '../empresas.json')
+			);
+			if (buffer.toString() !== '') {
+				listEmpresas = JSON.parse(buffer.toString());
+			}
 			const res = await instanceAxios.get(`/?${queryApi}`);
 			console.log(res.data);
 			if (res.data.name) {
